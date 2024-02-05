@@ -1,11 +1,18 @@
 {
   "dependencies": {
-    "express": "^4.18.2"
+    "@aws-sdk/node-http-handler": "^3.374.0",
+    "express": "^4.18.2",
+    "proxy-agent": "^6.3.1"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.498.0",
     "@marp-team/marp-cli": "^3.4.0",
     "@nuxt/eslint-config": "^0.2.0",
+    "@nuxt/kit": "^3.10.0",
+    "@types/cors": "~2.8.17",
+    "@types/eslint": "~8.56.2",
+    "@types/eslint-config-prettier": "~6.11.3",
+    "@types/express": "~4.17.21",
     "animate.css": "^4.1.1",
     "cors": "^2.8.5",
     "dotenv-cli": "^7.3.0",
@@ -15,7 +22,8 @@
     "npm-run-all": "^4.1.5",
     "nuxt": "^3.9.3",
     "prettier": "^3.2.4",
-    "tsup": "^8.0.1"
+    "tsup": "^8.0.1",
+    "typesync": "^0.12.1"
   },
   "packageManager": "npm@8.11.0",
   "private": true,
@@ -31,6 +39,10 @@
     "slide": "marp -s docs",
     "start": "node .output/server/index.mjs",
     "start:express": "dotenv -e .env -- node .tsup-output/express.js",
-    "update": "npm-check-updates --deep --upgrade && npm dedupe"
+    "update": "npm-check-updates --deep --upgrade && npm dedupe",
+    "preinstall": "typesync || :"
+  },
+  "rules":{
+    "on-console": 0
   }
 }

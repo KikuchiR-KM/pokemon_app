@@ -13,6 +13,7 @@ const streamToString = (stream) =>
 
 /** トレーナーの一覧の取得 */
 export const findTrainers = async () => {
+  console.log("🚀 ~ findTrainers ~ config.bucketName:", config.bucketName)
   const objects = await s3Client.send(
     new ListObjectsCommand({ Bucket: config.bucketName }),
   );

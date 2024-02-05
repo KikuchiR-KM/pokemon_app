@@ -5,7 +5,7 @@ import { findPokemon } from "~/server/utils/pokemon";
 const router = Router();
 
 router.get("/hello", (_req, res) => {
-  res.send("Hello World");
+  res.send("Hello World 2024");
 });
 
 /** トレーナー名の一覧の取得 */
@@ -21,9 +21,19 @@ router.get("/trainers", async (_req, res, next) => {
 
 /** トレーナーの追加 */
 router.post("/trainer", async (req, res, next) => {
+
   try {
-    // TODO: リクエストボディにトレーナー名が含まれていなければ400を返す
-    // TODO: すでにトレーナー（S3 オブジェクト）が存在していれば409を返す
+    // [x]TODO: リクエストボディにトレーナー名が含まれていなければ400を返す
+    if (!("name" in req.body) || req.body.name.length <=0){
+      return res.sendStatus(400);
+    }
+    // [x] TODO:すでにトレーナー（S3 オブジェクト）が存在していれば409を返す
+    const trainers = await findTrainers();
+    const requestedTrainersKey = `${req.body.name}.json`;
+    const trainerAlreadyExists = trainers.some(({Key}) => Key === requestedTrainersKey);
+    if(trainerAlreadyExists){
+      return res.sendStatus(409);
+    }
     const result = await upsertTrainer(req.body.name, req.body);
     res.status(result["$metadata"].httpStatusCode).send(result);
   } catch (err) {
