@@ -1,4 +1,4 @@
-import { ListObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectAclCommand, GetObjectCommand, ListObjectsCommand, PutObjectCommand, RestoreRequestFilterSensitiveLog } from "@aws-sdk/client-s3";
 import s3Client from "./s3Client";
 
 const config = useRuntimeConfig();
@@ -13,7 +13,6 @@ const streamToString = (stream) =>
 
 /** トレーナーの一覧の取得 */
 export const findTrainers = async () => {
-  console.log("🚀 ~ findTrainers ~ config.bucketName:", config.bucketName)
   const objects = await s3Client.send(
     new ListObjectsCommand({ Bucket: config.bucketName }),
   );
@@ -21,7 +20,20 @@ export const findTrainers = async () => {
 };
 
 /** トレーナーの取得 */
-// TODO: トレーナーを取得する S3 クライアント処理の実装
+// [ ]TODO: トレーナーを取得する S3 クライアント処理の実装
+export const findTrainer = async (name) => {
+  const bucketParams ={
+    Bucket: config.bucketName,
+    Key:`${name}.json`,
+  }
+  const object = await s3Client.send(
+    new GetObjectCommand(bucketParams)
+  );
+  const trainer = JSON.parse(await streamToString(object.Body));
+  console.log("🚀 ~ file: trainer.js:34 ~ findTrainer ~ trainer:", trainer)
+  
+  return trainer;
+}
 
 /** トレーナーの追加更新 */
 export const upsertTrainer = async (name, trainer) => {
