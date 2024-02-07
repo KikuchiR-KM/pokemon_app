@@ -42,7 +42,7 @@
     "update": "npm-check-updates --deep --upgrade && npm dedupe",
     "preinstall": "typesync || :"
   },
-  "rules":{
+  "rules": {
     "on-console": 0
   }
 }
