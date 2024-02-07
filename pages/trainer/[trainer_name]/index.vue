@@ -1,5 +1,17 @@
 <script setup>
+// import { Router } from 'express';
+
 const route = useRoute();
+const router = useRouter();
+
+const{
+    dialog:deleteDialog,
+    onOpen:onOpenDel,
+    onClose:onCloseDel
+} = useDialog();
+
+
+
 const { data: trainer, refresh } = await useFetch(
     () => `/api/trainer/${route.params.trainer_name}`,
     {
@@ -7,8 +19,17 @@ const { data: trainer, refresh } = await useFetch(
     },
 );
 console.log("🚀 ~ file: index.vue:6 ~ route.params.trainer_name:", route.params.trainer_name)
-console.log("ここ１")
 console.log(trainer.name)
+
+const eraseTrainer = async () => {
+    const response = await $fetch(`/api/trainer/${route.params.trainer_name}`, {
+        method:"DELETE",
+    }).catch((e) => e);
+    console.log("if***************")
+    if(response instanceof Error) return;
+    console.log("router.push("/")")
+    router.push("/")
+};
 
 </script>
 
@@ -20,6 +41,24 @@ console.log(trainer.name)
             <img src="/avatar2.png" />
             <p>{{ trainer.name }}</p>
         </div>
+        <GamifyButton type="button" @click="onOpenDel(true)">トレーナ情報の削除</GamifyButton>
+        <GamifyDialog 
+            v-if="deleteDialog"
+            id="del-confirm-dialog"
+            title="さいしゅうかくにん"
+            :description="`${trainer.name}のじょうほうは、もとにもどせないけどいいか？`"
+            @close="onCloseDel"
+        >
+            <GamifyList :border="false" direction="horizon">
+            <GamifyItem>
+                <GamifyButton @click="eraseTrainer">はい</GamifyButton>
+            </GamifyItem>
+            <GamifyItem>
+                <GamifyButton @click="onCloseDel">いいえ</GamifyButton>
+            </GamifyItem>
+            </GamifyList>
+        </GamifyDialog>
+
     </div>
 </template>
 
