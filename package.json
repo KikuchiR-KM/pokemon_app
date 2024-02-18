@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@aws-sdk/node-http-handler": "^3.374.0",
+    "axios": "^1.6.7",
     "express": "^4.18.2",
     "proxy-agent": "^6.3.1"
   },

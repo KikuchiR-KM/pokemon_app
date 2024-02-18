@@ -25,9 +25,7 @@ const eraseTrainer = async () => {
     const response = await $fetch(`/api/trainer/${route.params.trainer_name}`, {
         method:"DELETE",
     }).catch((e) => e);
-    console.log("if***************")
     if(response instanceof Error) return;
-    console.log("router.push("/")")
     router.push("/")
 };
 
@@ -42,6 +40,14 @@ const eraseTrainer = async () => {
             <p>{{ trainer.name }}</p>
         </div>
         <GamifyButton type="button" @click="onOpenDel(true)">トレーナ情報の削除</GamifyButton>
+        
+        <h2>なかよしのポケモン</h2>
+        <CatchButton :to = "`/trainer/${route.params.trainer_name}/poke_catch`">ポケモン捕縛</CatchButton>
+        <!-- [ ] TODO: 捕まえたポケモンを表示する -->
+        
+        
+        
+        <!-- トレーナー削除の確認ダイアログ -->
         <GamifyDialog 
             v-if="deleteDialog"
             id="del-confirm-dialog"

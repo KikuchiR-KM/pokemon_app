@@ -55,7 +55,7 @@ export const upsertTrainer = async (name, trainer) => {
 };
 
 /** トレーナーの削除 */
-// [ ] TODO: トレーナーを削除する S3 クライアント処理の実装
+// [x] TODO: トレーナーを削除する S3 クライアント処理の実装
 export const deleteTrainer = async(name) => {
   const bucketParams ={
     Bucket: config.bucketName,
