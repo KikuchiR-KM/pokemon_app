@@ -6,7 +6,7 @@ const BASE_URL = "https://pokeapi.co/api/v2/";
 
 // pageを区切るならpage,limitの値を動的に変化させればよい
 const page = 0;
-const limit = 1302;
+const limit = 1025;
 const pokemonData = ref([]);
 const pokemonJapaneseNames = ref([]);
 
@@ -16,9 +16,11 @@ const {
     onClose: onCloseCatch
  } = await useDialog();
 
-const getPokemonJapaneseName = async (englishName) => {
+const getPokemonJapaneseName = async (pokemonUrl) => {
     try {
-        const response = await fetch(`${BASE_URL}pokemon-species/${englishName.toLowerCase()}`);
+        const pokemonNo = pokemonUrl.match(/\/(\d+)\/$/);
+        // const response = await fetch(`${BASE_URL}pokemon-species/${englishName.toLowerCase()}`);
+        const response = await fetch(`${BASE_URL}pokemon-species/${pokemonNo[1]}`);
         if (!response.ok) {
             throw new Error("ポケモンの情報を取得できませんでした。");
         }
@@ -37,9 +39,8 @@ onMounted(async () => {
         if (response.ok) {
             const data = await response.json();
             pokemonData.value = data.results;
-
             // 各ポケモンに対して非同期で日本語名を取得
-            const promises = pokemonData.value.map(pokemon => getPokemonJapaneseName(pokemon.name));
+            const promises = pokemonData.value.map(pokemon => getPokemonJapaneseName(pokemon.url));
             pokemonJapaneseNames.value = await Promise.all(promises);
         } else {
             throw new Error("ポケモンの情報を取得できませんでした。");

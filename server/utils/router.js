@@ -45,7 +45,6 @@ router.post("/trainer", async (req, res, next) => {
 /** トレーナーの取得 */
 // [x] TODO: トレーナーを取得する API エンドポイントの実装
 router.get("/trainer/:trainerName", async (req, res, next) => {
-  console.log("トレーナーの取得")
   try{
     const {trainerName} = req.params;
     const trainer = await findTrainer(trainerName);
@@ -125,18 +124,12 @@ router.post("/trainer/:trainerName/pokemon", async (req, res, next) => {
 /** ポケモンの削除 */
 // [x] TODO: ポケモンを削除する API エンドポイントの実装
 router.delete("/trainer/:trainerName/pokemon/:pokemonId", async(req, res, next) => {
-    console.log("バイバイ　IN")
     try{
-        console.log("Try　IN")
-
         const {trainerName, pokemonId} = req.params;
-        console.log("🚀 ~ file: router.js:133 ~ router.delete ~ pokemonId:", pokemonId)
-        console.log("🚀 ~ file: router.js:133 ~ router.delete ~ trainerName:", trainerName)
         const trainer = await findTrainer(trainerName)
         const index = trainer.pokemons.findIndex(
             (pokemonInfo) => String(pokemonInfo.id) === pokemonId
         );
-        console.log("🚀 ~ file: router.js:139 ~ router.delete ~ index:", index)
         trainer.pokemons.splice(index,1);
         const result = await upsertTrainer(trainerName, trainer);
         res.status(result["$metadata"].httpStatusCode).send(result);

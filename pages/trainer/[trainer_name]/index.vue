@@ -32,7 +32,6 @@ const eraseTrainer = async () => {
 };
 
 const byePokemon = async (pokemonId) =>{
-    console.log("byePokemon IN")
     const response = await $fetch(
         `/api/trainer/${route.params.trainer_name}/pokemon/${pokemonId}`,
         {
