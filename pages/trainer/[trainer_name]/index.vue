@@ -1,5 +1,4 @@
 <script setup>
-// import { Router } from 'express';
 
 const route = useRoute();
 const router = useRouter();
@@ -48,6 +47,11 @@ const byePokemon = async (pokemonId) =>{
 
 <template>
     <div>
+        <header>
+            <NuxtLink to="/">ホーム</NuxtLink>
+            <span class="link-gap"></span>
+            <NuxtLink to="/trainer">トレーナーの一覧</NuxtLink>
+        </header>
         <h1>トレーナーの情報</h1>
         <div class="trainer-info">
             <img src="/avatar2.png" />
@@ -117,5 +121,9 @@ const byePokemon = async (pokemonId) =>{
 .trainer-info > img {
     width:80px;
     height:80px;
+}
+
+.link-gap {
+    margin-right: 20px;
 }
 </style>

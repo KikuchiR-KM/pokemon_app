@@ -26,6 +26,9 @@ const onSubmit = async() => {
 
 <template>
   <div>
+    <header>
+      <NuxtLink to="/">ホーム</NuxtLink>
+    </header>
     <h1>あたらしくはじめる</h1>
     <p>きみのなまえをおしえてくれ！</p>
 

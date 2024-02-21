@@ -4,6 +4,9 @@ const {data:trainers} = await useTrainers();
 
 <template>
   <div>
+    <header>
+    <NuxtLink to="/">ホーム</NuxtLink>
+   </header>
     <h1>つづきからはじめる</h1>
     <form @submit.prevent>
       <GamifyList>

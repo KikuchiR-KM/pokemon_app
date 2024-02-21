@@ -66,6 +66,11 @@ const onCatch = async (pokemon) => {
 
 <template>
     <div>
+        <header>
+            <NuxtLink to="/">ホーム</NuxtLink>
+            <span class="link-gap"></span>
+            <NuxtLink to="/trainer">トレーナーの一覧</NuxtLink>
+        </header>
         <h1>どのポケモンとなかよくなる？</h1>
 
         <GamifyList>
@@ -92,3 +97,9 @@ const onCatch = async (pokemon) => {
         </GamifyDialog>
     </div>
 </template>
+
+<style scoped>
+.link-gap {
+    margin-right: 20px;
+}
+</style>
