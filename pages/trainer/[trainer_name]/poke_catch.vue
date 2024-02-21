@@ -50,11 +50,11 @@ onMounted(async () => {
 });
 
 const onCatch = async (pokemon) => {
-    console.log("🚀 ~ file: poke_catch.vue:53 ~ onCatch ~ pokemon:", pokemon)
     const response = await $fetch(`/api/trainer/${route.params.trainer_name}/pokemon`, {
     method: "POST",
     body: {
-        name: pokemon.name,
+        name: pokemon[0].name,
+        Jp_name: pokemon[2]
     },
     }).catch((e) => e);
     if (response instanceof Error) return;
@@ -70,7 +70,7 @@ const onCatch = async (pokemon) => {
         <GamifyList>
             <GamifyItem v-for="(pokemon, index) in pokemonData" :key="pokemon.url">
                 <p class="pokemon-name">{{ pokemonJapaneseNames[index] }}</p>
-                <GamifyButton type="Button" @click="onOpenCatch([pokemon, index+1])">コンタクトする</GamifyButton>
+                <GamifyButton type="Button" @click="onOpenCatch([pokemon, index+1, pokemonJapaneseNames[index]])">コンタクトする</GamifyButton>
             </GamifyItem>
         </GamifyList>
 
@@ -82,7 +82,7 @@ const onCatch = async (pokemon) => {
             @close="onCloseCatch">
             <GamifyList :border="false" direction="horizon">
                 <GamifyItem>
-                    <GamifyButton @click="onCatch(catchDialog[0])">はい</GamifyButton>
+                    <GamifyButton @click="onCatch(catchDialog)">はい</GamifyButton>
                 </GamifyItem>
                 <GamifyItem>
                     <GamifyButton @click="onCloseCatch">いいえ</GamifyButton>

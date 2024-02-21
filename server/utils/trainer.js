@@ -1,9 +1,7 @@
 import { 
-  GetObjectAclCommand,
   GetObjectCommand,
   ListObjectsCommand,
   PutObjectCommand,
-  RestoreRequestFilterSensitiveLog,
   DeleteObjectCommand
  } from "@aws-sdk/client-s3";
 import s3Client from "./s3Client";
@@ -37,7 +35,7 @@ export const findTrainer = async (name) => {
     new GetObjectCommand(bucketParams)
   );
   const trainer = JSON.parse(await streamToString(object.Body));
-  console.log("🚀 ~ file: trainer.js:34 ~ findTrainer ~ trainer:", trainer)
+  // console.log("🚀 ~ file: trainer.js:34 ~ findTrainer ~ trainer:", trainer)
   
   return trainer;
 }

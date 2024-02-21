@@ -81,7 +81,6 @@ router.delete("/trainer/:trainerName", async(req, res, next) => {
 
 /** ポケモンの追加 */
 router.post("/trainer/:trainerName/pokemon", async (req, res, next) => {
-  console.log("post pokemon")
   try {
     const { trainerName } = req.params;
     const trainer = await findTrainer(trainerName)
@@ -89,16 +88,17 @@ router.post("/trainer/:trainerName/pokemon", async (req, res, next) => {
       ? trainer.pokemons[trainer.pokemons.length - 1].id
       : 0;
     const newPokemonId = lastPokemonId + 1;
-    console.log("🚀 ~ file: router.js:92 ~ router.post ~ newPokemonId:", newPokemonId)
-    console.log("🚀 ~ file: router.js:99 ~ router.post ~ req.body.name:", req.body.name)
+    // console.log("🚀 ~ file: router.js:92 ~ router.post ~ newPokemonId:", newPokemonId)
+    // console.log("🚀 ~ file: router.js:99 ~ router.post ~ req.body.name:", req.body.name)
 
     // [x] TODO: リクエストボディにポケモン名が含まれていなければ400を返す
     if (!("name" in req.body) || req.body.name.length <=0){
       return res.sendStatus(400);
     }
-    console.log("ここ")
     const pokemon = await findPokemon(req.body.name);
-    console.log("🚀 ~ file: router.js:99 ~ router.post ~ pokemon:", pokemon)
+	const Jp_name = req.body.Jp_name
+    // console.log("🚀 ~ file: router.js:101 ~ router.post ~ Jp_name:", Jp_name)
+    // console.log("🚀 ~ file: router.js:99 ~ router.post ~ pokemon:", pokemon)
     // [x] TODO: 削除系 API エンドポイントを利用しないかぎりポケモンは保持する
     const {
       name,
@@ -109,9 +109,11 @@ router.post("/trainer/:trainerName/pokemon", async (req, res, next) => {
     trainer.pokemons.push({
       id:newPokemonId,
       name,
+      jp_name:Jp_name,
       order,
       sprites:{front_default},
     });
+	// console.log("🚀 ~ file: router.js:116 ~ router.post ~ trainer.pokemons:", trainer.pokemons)
 
     const result = await upsertTrainer(trainerName, trainer);
     res.status(result["$metadata"].httpStatusCode).send(result);
@@ -121,7 +123,27 @@ router.post("/trainer/:trainerName/pokemon", async (req, res, next) => {
 });
 
 /** ポケモンの削除 */
-// [ ] TODO: ポケモンを削除する API エンドポイントの実装
+// [x] TODO: ポケモンを削除する API エンドポイントの実装
+router.delete("/trainer/:trainerName/pokemon/:pokemonId", async(req, res, next) => {
+    console.log("バイバイ　IN")
+    try{
+        console.log("Try　IN")
+
+        const {trainerName, pokemonId} = req.params;
+        console.log("🚀 ~ file: router.js:133 ~ router.delete ~ pokemonId:", pokemonId)
+        console.log("🚀 ~ file: router.js:133 ~ router.delete ~ trainerName:", trainerName)
+        const trainer = await findTrainer(trainerName)
+        const index = trainer.pokemons.findIndex(
+            (pokemonInfo) => String(pokemonInfo.id) === pokemonId
+        );
+        console.log("🚀 ~ file: router.js:139 ~ router.delete ~ index:", index)
+        trainer.pokemons.splice(index,1);
+        const result = await upsertTrainer(trainerName, trainer);
+        res.status(result["$metadata"].httpStatusCode).send(result);
+    } catch(err) {
+        next(err);
+    }
+})
 
 
 export default router;
